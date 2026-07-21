@@ -1,0 +1,22 @@
+한울학교 진로마트 v6 Firebase 여러 기기 실시간 공유 설정
+
+1. Firebase Console에서 프로젝트를 생성합니다.
+2. Authentication > 로그인 방법에서 '익명' 로그인을 사용 설정합니다.
+3. Realtime Database를 생성합니다.
+   - 권장 리전: asia-southeast1
+4. 프로젝트 설정 > 내 앱 > 웹 앱에서 Firebase 구성값을 복사합니다.
+5. js/firebase-config.js 파일의 '여기에_...' 값을 실제 구성값으로 교체합니다.
+6. Realtime Database > 규칙에 firebase.rules.json 내용을 붙여넣고 게시합니다.
+7. 수정한 전체 파일을 GitHub Pages 또는 Firebase Hosting에 업로드합니다.
+8. 모든 기기에서 같은 웹 주소를 열면 주문, 상태, 재고, 배달원 정보가 실시간 공유됩니다.
+
+확인 방법
+- 기기 A에서 주문
+- 기기 B의 관리자/교사 화면에 새 주문 팝업, 빨간 배지, 반복 알림 표시
+- 기기 B에서 주문 상태 변경
+- 기기 A에서 자동 반영
+
+중요
+- 실제 Firebase 프로젝트의 apiKey/databaseURL 등은 사용자 프로젝트마다 달라 ZIP에 대신 입력할 수 없습니다.
+- 익명 인증을 반드시 켜야 현재 보안 규칙으로 연결됩니다.
+- 학교 운영 전 관리자 비밀번호(기본 1234)를 변경하세요.

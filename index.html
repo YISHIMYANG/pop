@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#54C7F3">
+  <title>진로마트 한울점</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner final-header">
+    <div class="header-logo-wrap">
+      <img class="school-logo" src="assets/hanul_logo.png" alt="한울학교 교표">
+    </div>
+
+    <div class="header-banner-wrap">
+      <img class="header-banner" src="assets/header_banner.png" alt="진로마트 한울점 교내배달서비스">
+    </div>
+
+    <div class="hero-actions final-actions">
+      <button id="voiceBtn" type="button">🔊 음성 안내</button><button id="qrQuickBtn" type="button">📱 QR 주문</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="homePage" class="page active">
+  <div class="mode-title">👥 사용자 모드를 선택해 주세요</div>
+  <div class="mode-row">
+    <button id="studentMode" class="mode-card selected">
+      <span class="avatar">👦🏻</span>
+      <span><strong>학생 모드</strong><small>주문하고, 배달을 이용해요</small></span>
+    </button>
+    <button id="teacherMode" class="mode-card teacher">
+      <span class="avatar">👩🏻‍🏫</span>
+      <span><strong>교사 모드</strong><small>주문을 관리하고, 통계를 확인해요</small></span>
+    </button>
+  </div>
+
+  <div class="main-menu">
+    <button class="menu-card blue" data-page="orderPage">
+      <span class="num">1</span><span class="big-icon">🛒</span>
+      <h2>주문하기</h2><p>교실, 물품, 수량을 선택하고 주문을 진행합니다.</p>
+    </button>
+    <button class="menu-card orange" data-page="historyPage">
+      <span class="num">2</span><span class="big-icon">📋</span>
+      <h2>주문내역</h2><p>나의 주문 내역과 진행 상태를 확인합니다.</p>
+    </button>
+    <button class="menu-card green" data-page="deliveryPage">
+      <span class="num">3</span><span class="big-icon">🚚</span>
+      <h2>배달하기</h2><p>배달할 주문을 선택하고 전자서명을 받습니다.</p>
+    </button>
+    
+    <button class="menu-card violet" data-page="statsPage">
+      <span class="num">4</span><span class="big-icon">📊</span>
+      <h2>통계보기</h2><p>주문 통계, 랭킹, 스탬프를 확인합니다.</p>
+    </button>
+  </div>
+
+  <div class="dashboard-grid">
+    <article class="panel">
+      <div class="panel-title">📅 오늘의 현황 <span id="todayDate"></span></div>
+      <div class="summary-row">
+        <div class="summary-box blue-soft">📋 <span>오늘 주문 수</span><strong id="todayOrders">0건</strong></div>
+        <div class="summary-box green-soft">🚚 <span>오늘 배달 완료 수</span><strong id="todayDone">0건</strong></div>
+      </div>
+      <p class="cheer">★ 멋진 하루를 함께 만들어가요! 😊</p>
+    </article>
+
+    <article class="panel">
+      <div class="panel-title">☷ 최근 주문 내역 <button class="small-link" data-page="historyPage">전체 보기</button></div>
+      <div id="recentOrders" class="recent-list"></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-title">⭐ 나의 배달 스탬프북 <button class="small-link" data-page="statsPage">자세히 보기</button></div>
+      <div id="homeStamps" class="home-stamps"></div>
+      <p class="stamp-msg">스탬프 10개를 모으면 특별한 배지가 지급돼요! 🏅</p>
+    </article>
+  </div>
+
+  <div class="notice-bar">
+    <strong>📢 공지사항</strong>
+    <span>안전한 배달을 위해 교내 이동 시 천천히, 주변을 살피며 이동해요! 😊</span>
+    <span id="cloudStatus" class="cloud-status">☁️ 연결 확인 중</span>
+  </div>
+  <button id="adminFloat" class="admin-float">⚙️ 관리자 <span id="newOrderBadge" class="new-order-badge hidden-badge">0</span></button>
+</section>
+
+<section id="orderPage" class="page">
+  <div class="page-head"><button data-page="homePage">← 홈</button><h2>📦 주문하기</h2></div>
+  <div class="stepper"><span class="active">1 교실</span><span>2 물품</span><span>3 수량</span><span>4 배달원</span><span>5 요청</span><span>6 확인</span></div>
+  <div id="orderWizard" class="panel wizard"></div>
+  <div class="wizard-nav"><button id="prevStep">← 이전</button><button id="nextStep" class="primary">다음 →</button></div>
+</section>
+
+
+<section id="qrPage" class="page">
+  <div class="page-head"><button data-page="homePage">← 홈</button><h2>📱 QR 주문</h2></div>
+  <div class="panel qr-panel"><h3>휴대폰으로 주문하기</h3><p>아래 QR코드를 찍으면 바로 1단계 교실 선택 화면이 열립니다.</p><div id="qrCode"></div><input id="qrUrl" readonly><div class="wizard-nav"><button id="copyQrUrl">주소 복사</button><button id="printQr" class="primary">QR 인쇄</button></div><p class="qr-note">GitHub Pages에 올린 뒤 이 화면을 새로 열면 실제 인터넷 주소로 QR이 자동 생성됩니다.</p></div>
+</section>
+
+<section id="historyPage" class="page">
+  <div class="page-head"><button data-page="homePage">← 홈</button><h2>📋 주문내역</h2></div>
+  <div class="filter-row">
+    <button class="filter active-filter" data-status="전체">전체</button>
+    <button class="filter" data-status="주문접수">주문접수</button>
+    <button class="filter" data-status="구매완료">구매완료</button>
+    <button class="filter" data-status="배달중">배달중</button>
+    <button class="filter" data-status="배달완료">배달완료</button>
+  </div>
+  <div id="historyList" class="card-list"></div>
+</section>
+
+<section id="deliveryPage" class="page">
+  <div class="page-head"><button data-page="homePage">← 홈</button><h2>🚚 배달하기</h2></div>
+  <div class="panel">
+    <h3>배달원 선택</h3><div id="deliveryWorkers" class="choice-grid"></div>
+  </div>
+  <div id="deliveryList" class="card-list"></div>
+</section>
+
+<section id="signaturePage" class="page">
+  <div class="page-head"><button data-page="deliveryPage">← 이전</button><h2>✍️ 수령 서명</h2></div>
+  <div class="panel">
+    <label>받은 사람 이름<input id="receiverName" type="text" placeholder="이름 입력"></label>
+    <canvas id="signatureCanvas" width="900" height="340"></canvas>
+    <div class="wizard-nav"><button id="clearSign">지우기</button><button id="completeDelivery" class="primary">배달 완료</button></div>
+  </div>
+</section>
+
+<section id="statsPage" class="page">
+  <div class="page-head"><button data-page="homePage">← 홈</button><h2>📊 통계보기</h2></div>
+  <div class="stats-grid">
+    <div class="stat-card"><span>📦</span><strong id="statAll">0</strong><small>전체 주문</small></div>
+    <div class="stat-card"><span>✅</span><strong id="statDone">0</strong><small>배달 완료</small></div>
+    <div class="stat-card"><span>🚚</span><strong id="statDoing">0</strong><small>배달중</small></div>
+    <div class="stat-card"><span>📈</span><strong id="statRate">0%</strong><small>완료율</small></div>
+  </div>
+  <div class="dashboard-grid two">
+    <article class="panel"><div class="panel-title">🏆 배달원 랭킹</div><div id="ranking"></div></article>
+    <article class="panel"><div class="panel-title">⭐ 스탬프북</div><select id="stampWorker"></select><div id="stampBook" class="home-stamps large"></div></article>
+  </div>
+</section>
+
+<section id="adminLoginPage" class="page">
+  <div class="login-card">
+    <h2>🔐 관리자 로그인</h2><p>기본 비밀번호: 1234</p>
+    <input id="adminPassword" type="password" placeholder="비밀번호 입력">
+    <button id="adminLogin" class="primary">로그인</button>
+    <button data-page="homePage">취소</button>
+    <p id="loginMsg"></p>
+  </div>
+</section>
+
+<section id="adminPage" class="page">
+  <div class="page-head"><button data-page="homePage">← 홈</button><h2>⚙️ 관리자 설정</h2></div>
+  <section class="panel teacher-live-panel">
+    <div class="panel-title">🔔 실시간 새 주문 <span id="adminNewOrderCount">0건</span></div>
+    <div id="adminNewOrders" class="card-list"><p>확인하지 않은 새 주문이 없습니다.</p></div>
+    <button id="ackAllOrders" class="primary compact-btn" type="button">모든 새 주문 확인</button>
+  </section>
+  <div class="admin-tabs">
+    <button class="active-tab" data-tab="productsTab">물품</button>
+    <button data-tab="roomsTab">교실</button>
+    <button data-tab="workersTab">배달원</button>
+    <button data-tab="backupTab">백업</button>
+  </div>
+  <div id="productsTab" class="panel admin-tab active-admin">
+    <h3>물품 관리</h3><div class="admin-form"><input id="newProduct" placeholder="물품명"><input id="newEmoji" value="📦"><input id="newStock" type="number" value="10" min="0"><button id="addProduct" class="primary">추가</button></div><div id="productAdminList"></div>
+  </div>
+  <div id="roomsTab" class="panel admin-tab"><h3>교실 관리</h3><div class="admin-form"><input id="newRoom" placeholder="교실명"><button id="addRoom" class="primary">추가</button></div><div id="roomAdminList"></div></div>
+  <div id="workersTab" class="panel admin-tab"><h3>배달원 관리</h3><div class="admin-form"><input id="newWorker" placeholder="학생 이름"><button id="addWorker" class="primary">추가</button></div><div id="workerAdminList"></div></div>
+  <div id="backupTab" class="panel admin-tab"><h3>데이터 백업</h3><button id="backupBtn" class="primary">백업 파일 저장</button><label class="restore-label">복원 파일 선택<input id="restoreInput" type="file" accept=".json"></label><button id="resetBtn" class="danger">전체 초기화</button></div>
+</section>
+</main>
+
+<div id="newOrderModal" class="new-order-modal" aria-hidden="true">
+  <div class="new-order-dialog" role="alertdialog" aria-modal="true" aria-labelledby="newOrderTitle">
+    <div class="new-order-icon">🔔</div>
+    <h2 id="newOrderTitle">새 주문이 들어왔습니다!</h2>
+    <div id="newOrderPopupBody"></div>
+    <button id="ackNewOrder" class="primary" type="button">확인하고 알림 끄기</button>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
