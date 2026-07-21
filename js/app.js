@@ -52,7 +52,16 @@ async function initFirebaseSync(){
      detectNewOrders(previousOrders,Array.isArray(d.orders)?d.orders:[]);
      refreshVisiblePage();
    },err=>{console.error(err);setCloudStatus("⚠️ Firebase 읽기 실패","error")});
- }catch(err){console.error(err);setCloudStatus("⚠️ Firebase 연결 실패","error");}
+ }catch(err){
+  console.error("Firebase 연결 오류:", err);
+
+  alert(
+    "Firebase 연결 오류\n\n" +
+    "코드: " + (err.code || "없음") + "\n" +
+    "내용: " + (err.message || err)
+  );
+
+  setCloudStatus("⚠️ Firebase 연결 실패", "error");
 }
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 let toastTimer;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("toast-show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("toast-show"),2200)}
