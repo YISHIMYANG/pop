@@ -3,11 +3,11 @@
   아래 값을 복사해 넣으세요. 이 파일은 GitHub에 함께 업로드합니다.
 */
 window.HANUL_FIREBASE_CONFIG = {
-  apiKey: "여기에_apiKey",
-  authDomain: "여기에_projectId.firebaseapp.com",
-  databaseURL: "https://여기에_database_name.asia-southeast1.firebasedatabase.app",
-  projectId: "여기에_projectId",
-  storageBucket: "여기에_projectId.firebasestorage.app",
-  messagingSenderId: "여기에_messagingSenderId",
-  appId: "여기에_appId"
+  apiKey: "Firebase 화면의 apiKey",
+  authDomain: "hanul-delivery-b62fd.firebaseapp.com",
+  databaseURL: "https://hanul-delivery-b62fd-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "hanul-delivery-b62fd",
+  storageBucket: "hanul-delivery-b62fd.firebasestorage.app",
+  messagingSenderId: "Firebase 화면의 숫자",
+  appId: "Firebase 화면의 appId"
 };
