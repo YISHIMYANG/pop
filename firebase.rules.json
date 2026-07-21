@@ -1,0 +1,9 @@
+{
+  "rules": {
+    "hanulDelivery": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "orders": { ".indexOn": ["createdAt", "status", "workerId"] }
+    }
+  }
+}
